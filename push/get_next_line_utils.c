@@ -6,11 +6,11 @@
 /*   By: rnaka <rnaka@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:10:21 by rnaka             #+#    #+#             */
-/*   Updated: 2022/12/17 18:54:19 by rnaka            ###   ########.fr       */
+/*   Updated: 2022/12/20 17:54:21 by rnaka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"get_next_line.h"
+#include "get_next_line.h"
 
 void	*ft_memmove(void *b1, const void *b2, size_t n)
 {
@@ -72,6 +72,8 @@ char	*ft_strchr(const char *s, int c)
 	i = 0;
 	u_ch = (unsigned char)c;
 	u_str = (unsigned char *)s;
+	if (!s)
+		return (NULL);
 	if (u_str[i] == u_ch)
 		return ((char *)u_str);
 	while (u_str[i++] != 0)

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_lineのコピー.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rnaka <rnaka@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 23:16:43 by yumaohno          #+#    #+#             */
-/*   Updated: 2022/12/17 16:50:03 by rnaka            ###   ########.fr       */
+/*   Updated: 2022/12/20 16:41:22 by rnaka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static char	*ft_free(char **str)
 static char	*ft_readline(int fd, char **line, char *buf, ssize_t *read_size)
 {
 	char		*tmp;
+
+
 	while (1)
 	{
 		tmp = ft_strjoin(*line, buf);
@@ -67,13 +69,15 @@ char	*get_next_line(int fd)
 
 	// if (fd < 0 || BUFFER_SIZE <= 0)
 	// 	return (NULL);
+
+	
 	line = ft_strdup("");
 	// if (!line)
 	// 	return (NULL);
 	// if (!ft_readline(fd, &line, buf, &read_size))
 	// 	return (NULL);
 	// if (!read_size)
-	//	return (line);
+	//	return (	line);
 	// new_line_ptr = ft_strchr(line, '\n');
 	ft_memmove(buf, new_line_ptr + 1, ft_strlen(new_line_ptr));
 	tmp = ft_substr(line, 0, (new_line_ptr + 1) - line);
@@ -113,3 +117,4 @@ int main(int argc, char const *argv[])
 	return (0);
 }
  */
+

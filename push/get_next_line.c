@@ -6,11 +6,11 @@
 /*   By: rnaka <rnaka@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 13:33:56 by rnaka             #+#    #+#             */
-/*   Updated: 2022/12/17 19:07:12 by rnaka            ###   ########.fr       */
+/*   Updated: 2022/12/20 17:56:03 by rnaka            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"get_next_line.h"
+#include "get_next_line.h"
 
 size_t	ft_strlen(const char *str)
 {
@@ -25,96 +25,85 @@ size_t	ft_strlen(const char *str)
 	return (count);
 }
 
-static int ft_strlib(char **c)
+static ssize_t	*ft_strlib(char **c)
 {
 	free(*c);
 	*c = NULL;
 	return (NULL);
 }
 
-static char *ft_read_line(int fd,char *buf, char **re_line)
+static ssize_t	*ft_read_line(int fd, char *buf, char **re_line, ssize_t *n)
 {
-	char *connect;
-	size_t n;
-	
+	char	*connect;
+
+	*n = 1;
 	while (1)
-	{	
-		connect = ft_strjoin(buf, *re_line);
+	{
+		connect = ft_strjoin(*re_line, buf);
+		free(*re_line);
 		if (connect == NULL)
-			return NULL;
-		ft_strlib(*re_line);
+			break ;
 		*re_line = connect;
-		
-		n = read(fd, buf, BUFFER_SIZE);
-		if (n == -1)
-			return (ft_strlib(re_line));
-		if (n < BUFFER_SIZE)
-			return(n);
-		if (!ft_strchr(*re_line,'\n'))
+		if (ft_strchr(*re_line, '\n'))
 			return (n);
-
+		*n = read(fd, buf, BUFFER_SIZE);
+		if (*n == -1)
+			return (ft_strlib(re_line));
+		buf[*n] = '\0';
+		if (*n == 0)
+		{
+			if (*re_line[0] == '\0')
+				return (ft_strlib(re_line));
+			return (n);
+		}
 	}
+	return (0);
 }
-
-
-
-
-
-
-
-
 
 char	*get_next_line(int fd)
 {
-	static char buf[BUFFER_SIZE + 1UL];
-	char *re_line;
-	size_t n;
-	char *p;
+	static char	buf[BUFFER_SIZE + 1UL];
+	ssize_t		n;
+	char		*re_line;
+	char		*p;
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	re_line = ft_strdup("");
 	if (re_line == NULL)
 		return (NULL);
-	n = ft_read_line(fd, &buf, &re_line);
-	if (n == NULL)
-		return NULL;
-	p = ft_strchr(buf, '\n');
-	printf("8");
-	if (!n)
-	{
-		n = ft_strlen(p);	
-		ft_memmove(buf,p,ft_strlen(p));
-	}
-	p = ft_substr(re_line,0,ft_strlen(p)-n);
-	free(re_line);
-	
-	
-	return(re_line);
+	if (!ft_read_line(fd, buf, &re_line, &n))
+		return (NULL);
+	if (n == 0)
+		return (re_line);
+	ft_memmove(buf, ft_strchr(re_line, '\n') + 1, ft_strlen(ft_strchr(re_line,
+				'\n')));
+	p = ft_substr(re_line, 0, ft_strlen(re_line) - ft_strlen(ft_strchr(re_line,
+					'\n')) + 1);
+	ft_strlib(&re_line);
+	re_line = p;
+	return (re_line);
 }
 
-
-
-
-
-
-
-
-
-
-int main()
+int	main(int argc, const char *argv[])
 {
-	static char aaa[10];
-	int fd = open("nnn.txt",O_RDONLY);
-	int a = 3;
+	int		fd;
+	char	*a;
 
-	// while (a != 0)
-	// {
-	// 	a--;
-		printf("%s",get_next_line(fd));
-	// }
-		
-	return 0;
+	if (argc == 1)
+		fd = 0;
+	else
+		fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		return (1);
+	while (1)
+	{
+		a = get_next_line(fd);
+		printf("%s", a);
+		if (!a)
+			break ;
+		free(a);
+	}
+	free(a);
+	return (0);
 }
-
-
-

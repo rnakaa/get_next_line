@@ -8,10 +8,9 @@ int main(void)
 {
 	static char aaa[10];
 	int fd = open("nnn.txt",O_RDONLY);
-	
-	read(fd,aaa,5);
-	printf("%s\n",aaa);
-	read(fd,aaa,5);
-	printf("%s\n",aaa);
+	char n[] = "abc\0ff";
+
+	// read(fd,aaa,5);
+	printf("%s",n);
 	return 0;
 }
